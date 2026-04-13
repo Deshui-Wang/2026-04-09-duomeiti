@@ -1,16 +1,5 @@
 <template>
   <div class="storyboard-center">
-    <!-- Project Title Header -->
-    <div class="storyboard-title-bar glass-card">
-      <div class="title-info">
-        <span class="label">标题：</span>
-        <span class="title">从3%顶级生豆到潮流联名，一杯咖啡如何炼成？</span>
-      </div>
-      <el-button class="premium-generate-btn" @click="$emit('generate')">
-        生成视频 <el-icon class="el-icon--right"><VideoPlay /></el-icon>
-      </el-button>
-    </div>
-
     <!-- Storyboard List -->
     <div class="scene-list" v-if="scenes.length > 0" @dragover.prevent>
       <div 
@@ -122,12 +111,22 @@
       </div>
     </div>
 
-    <!-- Empty State -->
-    <div class="empty-state" v-else>
-      <el-empty description="暂无分镜内容，请由智能脚本生成" :image-size="120" />
-    </div>
     <!-- Character Creation Dialog (Extracted to Component) -->
     <CreateIdentityDialog v-model="showCharCreateDialog" />
+
+    <!-- Project Title Header (Fixed at Bottom) -->
+    <div class="storyboard-title-bar glass-card fixed-bottom-bar">
+      <div class="title-info">
+        <span class="label">当前剧本：</span>
+        <span class="title">从3%顶级生豆到潮流联名，一杯咖啡如何炼成？</span>
+      </div>
+      <div class="bar-actions">
+        <span class="scene-meta-info">共 {{ scenes.length }} 个分镜</span>
+        <el-button class="premium-generate-btn" @click="$emit('generate')">
+          生成视频 <el-icon class="el-icon--right"><VideoPlay /></el-icon>
+        </el-button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -235,13 +234,30 @@ const scenes = ref([
 }
 
 .storyboard-title-bar {
-  padding: 12px 20px;
-  margin-bottom: 1.5rem;
+  padding: 16px 32px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: rgba(255, 255, 255, 0.05) !important;
-  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  background: rgba(15, 23, 42, 0.8) !important;
+  backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-bottom: none !important;
+  border-radius: 16px 16px 0 0 !important;
+  box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.5);
+  z-index: 50;
+  margin: 0 -12px -24px -12px; /* Pull to edges of parent padding */
+}
+
+.bar-actions {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.scene-meta-info {
+  font-size: 0.85rem;
+  color: #94a3b8;
+  font-weight: 500;
 }
 
 .storyboard-title-bar .title-info {
@@ -290,6 +306,7 @@ const scenes = ref([
   flex-direction: column;
   gap: 1.5rem;
   padding-right: 8px;
+  padding-bottom: 100px; /* Add space so last item isn't blocked by bottom bar */
 }
 
 .storyboard-item {
